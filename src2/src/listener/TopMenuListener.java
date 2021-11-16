@@ -2,7 +2,7 @@ package listener;
 
 import saveobject.PPT;
 import saveobject.Page;
-import ui.DragDrawPanel;
+import ui.PageListPanel;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -25,46 +25,100 @@ public class TopMenuListener implements ActionListener, ChangeListener, ItemList
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JButton jButton = (JButton) e.getSource();
-        String content = jButton.getText();
+        String content = "";
+        if (e.getSource() instanceof JButton) {
+            JButton jButton = (JButton) e.getSource();
+            content = jButton.getText();
+        } else {
+            JMenuItem source = (JMenuItem) e.getSource();
+            content = source.getText();
+
+        }
         System.out.println("点击按钮： " + content);
         if ("序列化".equals(content)) {
-            Page page = DragDrawPanel.getInstance().nowPage;
-            System.out.println(page);
-            page.saveObject();
+//            Page page = DrawBoardListener.getInstance().nowPage;
+//            System.out.println(page);
+//            page.saveObject();
+            PPT ppt = DrawBoardListener.getInstance().nowPPT;
+            System.out.println(ppt);
+            ppt.saveObject("nowPPT.txt");
         }
         if ("反序列".equals(content)) {
-            Page page = DragDrawPanel.getInstance().nowPage;
-            page.outObject();
+//            Page page = DrawBoardListener.getInstance().nowPage;
+//            page.outObject();
+            PPT ppt = DrawBoardListener.getInstance().nowPPT;
+            ppt.outObject("nowPPT.txt");
         }
-        if ("此页存图".equals(content)) {
-            Page page = DragDrawPanel.getInstance().nowPage;
-            page.savePanelAsImage();
+        if ("保存文件".equals(content)) {
+            PPT ppt = DrawBoardListener.getInstance().nowPPT;
+            System.out.println(ppt);
+            ppt.saveFile();
         }
-        if ("插入背景".equals(content)) {
-            Page page = DragDrawPanel.getInstance().nowPage;
+        if ("打开文件".equals(content)) {
+            PPT ppt = DrawBoardListener.getInstance().nowPPT;
+            ppt.openFile();
+        }
+        if ("清空文件".equals(content)) {
+            PPT ppt = new PPT();
+            Page page = new Page();
+            ppt.allPage.add(page);
 
+            PPT.reset(ppt, 0);
+        }
+        if ("删除当前页".equals(content)) {
+            PPT ppt = DrawBoardListener.getInstance().nowPPT;
+            int index = PageListPanel.selectIndex;
+            if (index > 0 || ppt.allPage.size() > 1) {
+                ppt.allPage.remove(index);
+                PPT.reset(ppt, index - 1);
+            }
+        }
+        if ("复制当前页".equals(content)) {
+//            PPT ppt = DrawBoardListener.getInstance().nowPPT;
+//            int index = PageListPanel.selectIndex;
+////            ppt.allPage.add(index + 1, new Page(ppt.allPage.get(index)));
+////            ppt.allPage.add(index + 1, ppt.allPage.get(index).clone());
+//            PPT.reset(ppt, index + 1);
+        }
+        if ("插入空白页".equals(content)) {
+            PPT ppt = DrawBoardListener.getInstance().nowPPT;
+            int index = PageListPanel.selectIndex;
+            ppt.allPage.add(index + 1, new Page());
+//            PPT.reset(ppt, index + 1);
+            PPT.reset(ppt, index);
+
+        }
+        if ("插入背景图".equals(content)) {
+            Page page = DrawBoardListener.getInstance().nowPage;
             page.loadImageToPanel();
         }
-        if ("删除选中".equals(content)) {
-            Page page = DragDrawPanel.getInstance().nowPage;
+        if ("删除背景图".equals(content)) {
+            Page page = DrawBoardListener.getInstance().nowPage;
+            page.clearInsertImage();
+        }
 
+        if ("此页存图".equals(content)) {
+            Page page = DrawBoardListener.getInstance().nowPage;
+            page.savePanelAsImage();
+        }
+        if ("删除选中".equals(content)) {
+            Page page = DrawBoardListener.getInstance().nowPage;
             page.outObject();
         }
         if ("清空".equals(content)) {
-            Page page = DragDrawPanel.getInstance().nowPage;
+            Page page = DrawBoardListener.getInstance().nowPage;
             page.outObject();
         }
-        if ("保存".equals(content)) {
-            PPT ppt = DragDrawPanel.getInstance().ppt;
-            ppt.saveObject();
-        }
-        if ("文件".equals(content)) {
-            PPT ppt = DragDrawPanel.getInstance().ppt;
-            ppt.outObject();
-        }
-        if("新增".equals(content)){
-            PageListPanelListener.getInstance().changeList();
+//        if ("保存".equals(content)) {
+//            PPT nowPPT = DrawBoardListener.getInstance().nowPPT;
+//            nowPPT.saveObject();
+//        }
+//        if ("文件".equals(content)) {
+//            PPT nowPPT = DrawBoardListener.getInstance().nowPPT;
+//            nowPPT.outObject();
+//        }
+        if ("新增".equals(content)) {
+            PageListPanel.changeList();
 
         }
 

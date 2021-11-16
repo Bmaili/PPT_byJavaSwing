@@ -1,23 +1,27 @@
 package listener;
 
 import graph.*;
+import saveobject.PPT;
 import saveobject.Page;
-import ui.DragDrawPanel;
 
 import javax.swing.*;
-import javax.swing.event.MouseInputAdapter;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
+import java.awt.image.BufferedImage;
 import java.util.Deque;
 import java.util.LinkedList;
 
-public class DrawBoardListener extends MouseInputAdapter {
-
+public class DrawBoardListener extends JPanel implements MouseInputListener {
+    public PPT nowPPT;
+    public Page nowPage;
+    static long II = 0;
 
     private static DrawBoardListener drawBoardListener = new DrawBoardListener();
 
-    public JPanel drawPanel = DragDrawPanel.getInstance();  //DragDrawPanel的唯一实例
+    public JPanel drawPanel = this;  //DragDrawPanel的唯一实例
     public String selectModule = "矩形";//选择的模式
     public int penWidth = 10;//线条尺寸
     public Color mainColor = Color.CYAN;//主笔色
@@ -41,7 +45,22 @@ public class DrawBoardListener extends MouseInputAdapter {
 
 
     private DrawBoardListener() {
+        nowPPT = new PPT();
+        nowPPT.allPage.add(new Page());
+        nowPPT.allPage.add(new Page());
+        nowPPT.allPage.add(new Page());
+
+        nowPage = nowPPT.allPage.get(0);
+
+//		我自己设置的大小 ——11月13日
+        setPreferredSize(new Dimension(864, 648));
+        Border border = new LineBorder(Color.black);
+        setBorder(border);
+        setBackground(Color.white);
+        this.addMouseListener(this);
+        this.addMouseMotionListener(this);
     }
+
 
     public static DrawBoardListener getInstance() {
         return drawBoardListener;
@@ -50,6 +69,11 @@ public class DrawBoardListener extends MouseInputAdapter {
 //        this.drawPanel=drawPanel;
 //    }
 
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
 
     //    鼠标按下
     @Override
@@ -130,7 +154,18 @@ public class DrawBoardListener extends MouseInputAdapter {
     }
 
     @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
     public void mouseDragged(MouseEvent mouseEvent) {
+//        System.out.println("鼠标拖拽");
         stop_x = mouseEvent.getX();
         stop_y = mouseEvent.getY();
         switch (this.selectModule) {
@@ -162,6 +197,11 @@ public class DrawBoardListener extends MouseInputAdapter {
                 addShape();
                 break;
         }
+
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
 
     }
 
@@ -224,14 +264,31 @@ public class DrawBoardListener extends MouseInputAdapter {
         lastShape.draw(drawPanel.getGraphics());
     }
 
-    public void setDrawBoardListener(){
-        Page nowPage = DragDrawPanel.getInstance().nowPage;
+    public void setDrawBoardListener() {
+        Page nowPage = DrawBoardListener.getInstance().nowPage;
         this.history = nowPage.history;
         this.stack = nowPage.stack;
         this.previous = nowPage.previous;
         this.moveShape = nowPage.moveShape;
         //取得画板对象重绘
-        DragDrawPanel.getInstance().paint(DrawBoardListener.getInstance().drawPanel.getGraphics());
+        DrawBoardListener.getInstance().paint(DrawBoardListener.getInstance().drawPanel.getGraphics());
 
+    }
+
+    public void paint(Graphics p) {
+        // 该函数是窗口大小变化时自动调用的函数，其中的p默认是this.getGraphics()（也就是绘图区域的画笔）
+        // 为父类重新绘制（即添加背景色）
+        super.paint(p);
+
+//         如果读取了图片，则先把图片画上
+        if (drawBoardListener.nowPage.insertImage != null) {
+            p.drawImage(drawBoardListener.nowPage.insertImage, 0, 0, null);
+        }
+//        DrawBoardListener el = DrawBoardListener.getInstance();
+        // 遍历绘图历史，绘制该图形
+        for (MyShape item : history) {
+            item.draw(p);
+        }
+//        System.out.println("重绘" + (++II) + "次");
     }
 }

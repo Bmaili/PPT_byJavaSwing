@@ -1,12 +1,15 @@
 package ui;
 
 
-import listener.PageListPanelListener;
+import listener.DrawBoardListener;
+import listener.TopMenuListener;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MyJFrame extends JFrame {
+//    TopMenuListener t = TopMenuListener.getInstance();
+//    DrawBoardListener el = DrawBoardListener.getInstance();
     private static MyJFrame mainWin = new MyJFrame("工作页面");
 
     public static MyJFrame getInstance() {
@@ -19,15 +22,18 @@ public class MyJFrame extends JFrame {
 
     private void init() {
 
+
+        this.setJMenuBar(MyJMenuBar.getInstance());
+
         JPanel down = new JPanel();
 
         //我电脑1920x1080
         down.setPreferredSize(new Dimension(768, 432));
 //        down.setLayout(new GridBagLayout());
-        down.add(DragDrawPanel.getInstance());
+        down.add(DrawBoardListener.getInstance());
 
         //创建一个水平分隔面板
-        JSplitPane drawSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(PageListPanelListener.getInstance().pageJList), down);
+        JSplitPane drawSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(PageListPanel.pageJList), down);
         //设置支持连续布局
         drawSplit.setContinuousLayout(true);
 

@@ -17,6 +17,8 @@ public class TopMenu extends JPanel {
     private static TopMenu myTopMenu = new TopMenu();
 
     private TopMenu() {
+//        PageListPanelListener instance = PageListPanelListener.getInstance();
+//        this.addMouseListener(instance);
         this.setPreferredSize(new Dimension(400, 100));
         init();
     }
@@ -41,7 +43,8 @@ public class TopMenu extends JPanel {
     public Box panelOne() {
 
         Box setBox1 = Box.createHorizontalBox();
-        String[] setBoxBtn1 = {"序列化", "反序列", "此页存图", "清空", "文件"};
+//        String[] setBoxBtn1 = {"序列化", "反序列", "此页存图", "清空", "文件"};
+        String[] setBoxBtn1 = {"序列化", "新增"};
         // 添加所有的按钮并添加按钮点击事件监听
         for (String item : setBoxBtn1) {
             JButton tmp = new JButton(item);
@@ -51,7 +54,8 @@ public class TopMenu extends JPanel {
         }
 
         Box setBox2 = Box.createHorizontalBox();
-        String[] setBoxBtn2 = {"插入背景", "删除选中", "关于", "保存","新增"};
+//        String[] setBoxBtn2 = {"插入背景", "删除选中", "关于", "保存","新增"};
+        String[] setBoxBtn2 = {};
         for (String item : setBoxBtn2) {
             JButton tmp = new JButton(item);
             tmp.addActionListener(topMenuListener);
@@ -257,7 +261,7 @@ public class TopMenu extends JPanel {
         Box textEditBox = panelFour();
 
         Box allBoxs = Box.createHorizontalBox();
-        allBoxs.add(setBox);
+//        allBoxs.add(setBox);
         allBoxs.add(drawSelectBox);
         allBoxs.add(colourSelect);
         allBoxs.add(textEditBox);

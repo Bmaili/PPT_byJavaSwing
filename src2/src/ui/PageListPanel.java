@@ -1,28 +1,49 @@
 package ui;
 
 import listener.DrawBoardListener;
-import listener.PageListPanelListener;
+import saveobject.PPT;
 import saveobject.Page;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 //    左侧列表
 public class PageListPanel extends JPanel implements ListCellRenderer {
+    public static JList<Page> pageJList;
 
+    public static DefaultListModel<Page> pageModel = new DefaultListModel<>();
+
+    static {
+        PPT ppt = DrawBoardListener.getInstance().nowPPT;
+
+        for (Page p : ppt.allPage) {
+            pageModel.addElement(p);
+        }
+//        pageModel.addElement(nowPPT.allPage.get(2));
+
+        //根据DefaultListModel创建一个JList对象
+        pageJList = new JList<>(pageModel);
+        //设置最大可视高度
+        pageJList.setVisibleRowCount(7);
+        //设置只能单选
+        pageJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        pageJList.setSelectedIndex(0);
+
+        pageJList.setCellRenderer(new PageListPanel());
+    }
+
+    public static int selectIndex = -1;
 
     public int indexID;
     private Color background;
     private Color foreground;
-    public static int selectIndex = -1;
 
-    public PageListPanel(){
+    public PageListPanel() {
         System.out.println("实例化；pagepanel");
-        PageListPanelListener instance = PageListPanelListener.getInstance();
-        this.addMouseListener(instance);
+//        PageListPanelListener instance = PageListPanelListener.getInstance();
+//        this.addMouseListener(instance);
     }
 
 
@@ -34,25 +55,25 @@ public class PageListPanel extends JPanel implements ListCellRenderer {
         background = isSelected ? list.getSelectionBackground() : Color.LIGHT_GRAY;
         foreground = isSelected ? list.getSelectionForeground() : list.getForeground();
         if (isSelected && selectIndex != index) {
+//        if (isSelected) {
 
             if (selectIndex != -1) {
-                Dimension imageSize = DragDrawPanel.getInstance().getSize();
+                Dimension imageSize = DrawBoardListener.getInstance().getSize();
                 BufferedImage image = new BufferedImage(imageSize.width, imageSize.height, BufferedImage.TYPE_INT_ARGB);
-                DragDrawPanel.getInstance().nowPage.image = image;
+                DrawBoardListener.getInstance().nowPage.image = image;
 
-                //
                 Graphics2D graphics = image.createGraphics();
-                DragDrawPanel.getInstance().paint(graphics);
+                DrawBoardListener.getInstance().paint(graphics);
                 graphics.dispose();
             }
 
             selectIndex = index;
 //            System.out.println(index + "is true");
-            DragDrawPanel.getInstance().nowPage = DragDrawPanel.getInstance().ppt.allPage.get(index);
+            DrawBoardListener.getInstance().nowPage = DrawBoardListener.getInstance().nowPPT.allPage.get(index);
             DrawBoardListener.getInstance().setDrawBoardListener();
 //            //取得画板对象重绘
-//            DragDrawPanel.getInstance().paint(DrawBoardListener.getInstance().drawPanel.getGraphics());
-//            DragDrawPanel.getInstance().ppt.allPage.set(index, nowPage);
+//            DrawBoardListener.getInstance().paint(DrawBoardListener.getInstance().drawPanel.getGraphics());
+//            DrawBoardListener.getInstance().nowPPT.allPage.set(index, nowPage);
 
 
         }
@@ -61,10 +82,6 @@ public class PageListPanel extends JPanel implements ListCellRenderer {
 
     @Override
     protected void paintComponent(Graphics g) {
-
-
-
-
         //填充背景矩形
         g.setColor(background);
 //        g.setColor(Color.GRAY);
@@ -77,25 +94,31 @@ public class PageListPanel extends JPanel implements ListCellRenderer {
         g.setColor(foreground);
 
 
-        BufferedImage image = DragDrawPanel.getInstance().ppt.allPage.get(indexID).image;
+        BufferedImage image = DrawBoardListener.getInstance().nowPPT.allPage.get(indexID).image;
         if (image != null) {
-//            System.out.println("绘制预览图");
             g.drawImage(image.getScaledInstance(154, 86, 0), 15, 15, null);
-        } else {
-//            System.out.println("预览图为null");
         }
-
+//        Graphics2D graphics = image.createGraphics();
+//        DrawBoardListener.getInstance().paint(graphics);
+//        graphics.dispose();
 //        //绘制好友昵称
 //        g.setFont(new Font("SansSerif", Font.BOLD, 18));
 //        g.drawString(name, getWidth() / 2 - name.length() * 10, 40);
     }
+
 
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(180, 120);
     }
 
-    public void foo(){
-
+    public static void changeList() {
+        Page page = new Page();
+        DrawBoardListener.getInstance().nowPPT.allPage.add(page);
+        DrawBoardListener.getInstance().nowPage = page;
+        DrawBoardListener.getInstance().setDrawBoardListener();
+        pageJList.setSelectedIndex(0);
+        pageModel.addElement(page);
+        System.out.println("invoked changelist()");
     }
 }
