@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +18,6 @@ public class TopMenu extends JPanel {
 
     private TopMenu() {
         this.setPreferredSize(new Dimension(400, 100));
-//        this.setBackground(Color.PINK);
         init();
     }
 
@@ -50,7 +51,7 @@ public class TopMenu extends JPanel {
         }
 
         Box setBox2 = Box.createHorizontalBox();
-        String[] setBoxBtn2 = {"插入背景", "删除选中", "关于", "保存"};
+        String[] setBoxBtn2 = {"插入背景", "删除选中", "关于", "保存","新增"};
         for (String item : setBoxBtn2) {
             JButton tmp = new JButton(item);
             tmp.addActionListener(topMenuListener);

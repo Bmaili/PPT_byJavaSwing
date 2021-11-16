@@ -63,6 +63,10 @@ public class TopMenuListener implements ActionListener, ChangeListener, ItemList
             PPT ppt = DragDrawPanel.getInstance().ppt;
             ppt.outObject();
         }
+        if("新增".equals(content)){
+            PageListPanelListener.getInstance().changeList();
+
+        }
 
 
     }

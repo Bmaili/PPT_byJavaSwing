@@ -1,20 +1,29 @@
 package ui;
 
 import listener.DrawBoardListener;
+import listener.PageListPanelListener;
 import saveobject.Page;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 //    左侧列表
-class ImageCellRenderer extends JPanel implements ListCellRenderer {
+public class PageListPanel extends JPanel implements ListCellRenderer {
 
 
     public int indexID;
     private Color background;
     private Color foreground;
     public static int selectIndex = -1;
+
+    public PageListPanel(){
+        System.out.println("实例化；pagepanel");
+        PageListPanelListener instance = PageListPanelListener.getInstance();
+        this.addMouseListener(instance);
+    }
 
 
     @Override
@@ -38,7 +47,7 @@ class ImageCellRenderer extends JPanel implements ListCellRenderer {
             }
 
             selectIndex = index;
-            System.out.println(index + "is true");
+//            System.out.println(index + "is true");
             DragDrawPanel.getInstance().nowPage = DragDrawPanel.getInstance().ppt.allPage.get(index);
             DrawBoardListener.getInstance().setDrawBoardListener();
 //            //取得画板对象重绘
@@ -52,6 +61,10 @@ class ImageCellRenderer extends JPanel implements ListCellRenderer {
 
     @Override
     protected void paintComponent(Graphics g) {
+
+
+
+
         //填充背景矩形
         g.setColor(background);
 //        g.setColor(Color.GRAY);
@@ -66,10 +79,10 @@ class ImageCellRenderer extends JPanel implements ListCellRenderer {
 
         BufferedImage image = DragDrawPanel.getInstance().ppt.allPage.get(indexID).image;
         if (image != null) {
-            System.out.println("绘制预览图");
+//            System.out.println("绘制预览图");
             g.drawImage(image.getScaledInstance(154, 86, 0), 15, 15, null);
         } else {
-            System.out.println("预览图为null");
+//            System.out.println("预览图为null");
         }
 
 //        //绘制好友昵称
@@ -80,5 +93,9 @@ class ImageCellRenderer extends JPanel implements ListCellRenderer {
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(180, 120);
+    }
+
+    public void foo(){
+
     }
 }

@@ -1,32 +1,33 @@
 package ui;
 
 
+import listener.PageListPanelListener;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class MyJFrame {
-    private JFrame mainWin = new JFrame("工作页面");
+public class MyJFrame extends JFrame {
+    private static MyJFrame mainWin = new MyJFrame("工作页面");
 
-    public void init() {
+    public static MyJFrame getInstance() {
+        return mainWin;
+    }
 
+    private MyJFrame(String name) {
+        super(name);
+    }
 
-        JList friendsList = new JList(DragDrawPanel.getInstance().ppt.allPage.toArray());
-        friendsList.setSelectedIndex(0);
-
-        //设置JList使用ImageCellRenderer作为列表项绘制器
-        friendsList.setCellRenderer(new ImageCellRenderer());
-
+    private void init() {
 
         JPanel down = new JPanel();
 
         //我电脑1920x1080
         down.setPreferredSize(new Dimension(768, 432));
-//        down.setPreferredSize(new Dimension(576, 400));
 //        down.setLayout(new GridBagLayout());
         down.add(DragDrawPanel.getInstance());
 
         //创建一个水平分隔面板
-        JSplitPane drawSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(friendsList), down);
+        JSplitPane drawSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(PageListPanelListener.getInstance().pageJList), down);
         //设置支持连续布局
         drawSplit.setContinuousLayout(true);
 
@@ -58,13 +59,6 @@ public class MyJFrame {
     }
 
     public static void main(String[] args) {
-        new MyJFrame().init();
+        MyJFrame.getInstance().init();
     }
-
-    //    画板
-    class DrawBoard extends JPanel {
-
-    }
-
-
 }
