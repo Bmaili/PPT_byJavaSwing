@@ -3,6 +3,8 @@ package listener;
 import graph.*;
 import saveobject.PPT;
 import saveobject.Page;
+import ui.MyJFrame;
+import ui.PageListPanel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -17,7 +19,7 @@ import java.util.LinkedList;
 public class DrawBoardListener extends JPanel implements MouseInputListener {
     public PPT nowPPT;
     public Page nowPage;
-    static long II = 0;
+    public boolean windowChange = false;
 
     private static DrawBoardListener drawBoardListener = new DrawBoardListener();
 
@@ -30,35 +32,35 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
     public boolean isFillShape = true;//是否填充图形
 
     public MyShape lastShape = null;
-    MyShape selectShape = null;
+    public MyShape selectShape = null;
     public int offsetX;
     public int offsetY;
 
+    public static BufferedImage defaultImage;
     // 所有画过的图
     public LinkedList<MyShape> history = new LinkedList<>();
-    // 保存实时按键的栈
-    public Deque<Integer> stack = new LinkedList<>();
     // 保存按鼠标时的历史状态（用于笔和橡皮的撤销）
-    public Deque<MyShape> previous = new LinkedList<>();
+    public LinkedList<MyShape> previous = new LinkedList<>();
     // 保存所有可以移动的对象
     public LinkedList<MyShape> moveShape = new LinkedList<>();
 
 
     private DrawBoardListener() {
-        nowPPT = new PPT();
-        nowPPT.allPage.add(new Page());
-        nowPPT.allPage.add(new Page());
-        nowPPT.allPage.add(new Page());
-
-        nowPage = nowPPT.allPage.get(0);
 
 //		我自己设置的大小 ——11月13日
-        setPreferredSize(new Dimension(864, 648));
+        setPreferredSize(new Dimension(1100, 648));
         Border border = new LineBorder(Color.black);
         setBorder(border);
         setBackground(Color.white);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
+//
+//        Dimension imageSize = this.getSize();
+//        defaultImage = new BufferedImage(imageSize.width, imageSize.height, BufferedImage.TYPE_INT_ARGB);
+
+        nowPPT = new PPT();
+        nowPPT.allPage.add(new Page());
+        nowPage = nowPPT.allPage.get(0);
     }
 
 
@@ -78,9 +80,11 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
     //    鼠标按下
     @Override
     public void mousePressed(MouseEvent e) {
+        windowChange = true;
 //        System.out.println("鼠标按下" + " " + start_x + " " + start_y + " " + stop_x + " " + stop_y);
         // 保存该个时刻的最新状态
-        previous.push(history.peekLast());
+        if (previous.peekLast() != history.peekLast())
+            previous.push(history.peekLast());
         // 按下鼠标时调用的函数
         start_x = e.getX();
         start_y = e.getY();
@@ -107,8 +111,14 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
                             remove.draw(drawPanel.getGraphics());
                             break;
                         }
-
                     }
+                    for (int j = 0; j < previous.size(); j++) {
+                        if (selectShape.getId() == previous.get(j).getId()) {
+                            previous.remove(j);
+                            break;
+                        }
+                    }
+
                     break;
                 }
             }
@@ -267,7 +277,6 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
     public void setDrawBoardListener() {
         Page nowPage = DrawBoardListener.getInstance().nowPage;
         this.history = nowPage.history;
-        this.stack = nowPage.stack;
         this.previous = nowPage.previous;
         this.moveShape = nowPage.moveShape;
         //取得画板对象重绘
@@ -276,6 +285,8 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
     }
 
     public void paint(Graphics p) {
+//        if (windowChange) {
+
         // 该函数是窗口大小变化时自动调用的函数，其中的p默认是this.getGraphics()（也就是绘图区域的画笔）
         // 为父类重新绘制（即添加背景色）
         super.paint(p);
@@ -289,6 +300,9 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
         for (MyShape item : history) {
             item.draw(p);
         }
+
+//            MyJFrame.getInstance().repaint();
 //        System.out.println("重绘" + (++II) + "次");
+//        }
     }
 }

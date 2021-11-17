@@ -6,6 +6,7 @@ import listener.TopMenuListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class MyJFrame extends JFrame {
 //    TopMenuListener t = TopMenuListener.getInstance();
@@ -60,9 +61,20 @@ public class MyJFrame extends JFrame {
 
         // 定义关闭程序
         mainWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         // 设置可见
         mainWin.setVisible(true);
+
+        for (int i = 0; i < DrawBoardListener.getInstance().nowPPT.allPage.size() - 1; i++) {
+            DrawBoardListener.getInstance().nowPage = DrawBoardListener.getInstance().nowPPT.allPage.get(i);
+            PageListPanel.flushPageList();
+        }
+        DrawBoardListener.getInstance().nowPage = DrawBoardListener.getInstance().nowPPT.allPage.get(0);
+
+
+
     }
+
 
     public static void main(String[] args) {
         MyJFrame.getInstance().init();

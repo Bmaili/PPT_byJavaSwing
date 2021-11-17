@@ -84,15 +84,20 @@ public class PPT implements Serializable {
             DrawBoardListener db = DrawBoardListener.getInstance();
             db.history = DrawBoardListener.getInstance().nowPage.history;
             db.moveShape = DrawBoardListener.getInstance().nowPage.moveShape;
-            db.stack = DrawBoardListener.getInstance().nowPage.stack;
             db.previous = DrawBoardListener.getInstance().nowPage.previous;
 
 
             PageListPanel.pageModel.clear();
-            for (Page p: readPPT.allPage ) {
+            for (Page p : readPPT.allPage) {
                 PageListPanel.pageModel.addElement(p);
             }
             PageListPanel.pageJList.setSelectedIndex(0);
+
+            for (int i = 0; i < DrawBoardListener.getInstance().nowPPT.allPage.size() - 1; i++) {
+                DrawBoardListener.getInstance().nowPage = DrawBoardListener.getInstance().nowPPT.allPage.get(i);
+                PageListPanel.flushPageList();
+            }
+            DrawBoardListener.getInstance().nowPage = DrawBoardListener.getInstance().nowPPT.allPage.get(0);
 
             //取得画板对象重绘
             DrawBoardListener.getInstance().paint(DrawBoardListener.getInstance().drawPanel.getGraphics());
@@ -104,7 +109,7 @@ public class PPT implements Serializable {
     }
 
     //重置PPT
-    public static void reset(PPT ppt,int selectPage){
+    public static void reset(PPT ppt, int selectPage) {
         DrawBoardListener.getInstance().nowPPT = ppt;
         DrawBoardListener.getInstance().nowPage = ppt.allPage.get(selectPage);
 
@@ -112,17 +117,21 @@ public class PPT implements Serializable {
         DrawBoardListener db = DrawBoardListener.getInstance();
         db.history = DrawBoardListener.getInstance().nowPage.history;
         db.moveShape = DrawBoardListener.getInstance().nowPage.moveShape;
-        db.stack = DrawBoardListener.getInstance().nowPage.stack;
         db.previous = DrawBoardListener.getInstance().nowPage.previous;
 
 
         PageListPanel.pageModel.clear();
-        for (Page p: ppt.allPage ) {
+        for (Page p : ppt.allPage) {
             PageListPanel.pageModel.addElement(p);
         }
         PageListPanel.pageJList.setSelectedIndex(selectPage);
 
         //取得画板对象重绘
         DrawBoardListener.getInstance().paint(DrawBoardListener.getInstance().drawPanel.getGraphics());
+
+
+        PageListPanel.flushPageList();
+
     }
+
 }

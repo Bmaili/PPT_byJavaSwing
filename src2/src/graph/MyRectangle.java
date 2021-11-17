@@ -1,6 +1,5 @@
 package graph;
 
-import listener.DrawBoardListener;
 
 import java.awt.*;
 

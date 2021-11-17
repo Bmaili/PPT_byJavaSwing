@@ -1,9 +1,13 @@
 package ui;
 
+import listener.DrawBoardListener;
 import listener.TopMenuListener;
+import saveobject.PPT;
+import saveobject.Page;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class MyJMenuBar extends JMenuBar {
     TopMenuListener topMenuListener = TopMenuListener.getInstance();
@@ -28,9 +32,10 @@ public class MyJMenuBar extends JMenuBar {
 
 
         //创建新建菜单项
-        JMenuItem clearItem = new JMenuItem("清空文件");
-        JMenuItem saveItem = new JMenuItem("保存文件");
-        JMenuItem openItem = new JMenuItem("打开文件");
+        JMenuItem clearFileItem = new JMenuItem("清空文件");
+        JMenuItem saveFileItem = new JMenuItem("保存文件");
+        JMenuItem openFileItem = new JMenuItem("打开文件");
+        JMenuItem newFileItem = new JMenuItem("新建文件");
 
         JMenuItem deletePageItem = new JMenuItem("删除当前页");
         JMenuItem copyPageItem = new JMenuItem("复制当前页");
@@ -44,17 +49,18 @@ public class MyJMenuBar extends JMenuBar {
         JMenuItem revokeItem = new JMenuItem("撤销");
         revokeItem.setAccelerator(KeyStroke.getKeyStroke('Z', java.awt.Event.CTRL_MASK));
         JMenuItem clearDrawItem = new JMenuItem("清空");
-        JMenuItem deleteShapItem = new JMenuItem("删除选中");
+//        JMenuItem deleteShapItem = new JMenuItem("删除选中");
 
         JMenuItem playNowPageItem = new JMenuItem("从当前页播放");
-        JMenuItem playFirstPageItem = new JMenuItem("首页播放");
+        JMenuItem playFirstPageItem = new JMenuItem("播放");
 
         JMenuItem operateItem = new JMenuItem("操作说明");
         JMenuItem aboutItem = new JMenuItem("关于");
 
-        fileJMenu.add(clearItem);
-        fileJMenu.add(saveItem);
-        fileJMenu.add(openItem);
+        fileJMenu.add(newFileItem);
+        fileJMenu.add(saveFileItem);
+        fileJMenu.add(openFileItem);
+        fileJMenu.add(clearFileItem);
 
         pageJMenu.add(deletePageItem);
         pageJMenu.add(copyPageItem);
@@ -65,7 +71,7 @@ public class MyJMenuBar extends JMenuBar {
         drawJMenu.add(savePicItem);
         drawJMenu.add(revokeItem);
         drawJMenu.add(clearDrawItem);
-        drawJMenu.add(deleteShapItem);
+//        drawJMenu.add(deleteShapItem);
 
         playJMenu.add(playNowPageItem);
         playJMenu.add(playFirstPageItem);
@@ -81,28 +87,65 @@ public class MyJMenuBar extends JMenuBar {
         helpJMenu.add(xuliehua);
         helpJMenu.add(fanxu);
 
-        // 添加到右边
-        this.add(new Component() {
-            @Override
-            public void setPreferredSize(Dimension preferredSize) {
-                super.setPreferredSize(new Dimension(100, 30));
-            }
-        });
+//        // 添加到右边
+//        this.add(new Component() {
+//            @Override
+//            public void setPreferredSize(Dimension preferredSize) {
+//                super.setPreferredSize(new Dimension(100, 30));
+//            }
+//        });
         this.add(fileJMenu);
         this.add(pageJMenu);
         this.add(drawJMenu);
         this.add(playJMenu);
         this.add(helpJMenu);
 
-        saveItem.addActionListener(topMenuListener);
-        openItem.addActionListener(topMenuListener);
-        clearItem.addActionListener(topMenuListener);
+        newFileItem.addActionListener(topMenuListener);
+        newFileItem.addActionListener(e -> {
+            int result = JOptionPane.showConfirmDialog(MyJFrame.getInstance(), "是否保存当前文件", "新建文件确认对话框", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (result != JOptionPane.CLOSED_OPTION) {
+                if (result == JOptionPane.YES_OPTION) {
+                    PPT ppt = DrawBoardListener.getInstance().nowPPT;
+                    ppt.saveFile();
+                }
+                PPT ppt = new PPT();
+                Page page = new Page();
+                ppt.allPage.add(page);
+                PPT.reset(ppt, 0);
+            }
+        });
+        saveFileItem.addActionListener(topMenuListener);
+        openFileItem.addActionListener(topMenuListener);
+        clearFileItem.addActionListener(e -> {
+            int result = JOptionPane.showConfirmDialog(MyJFrame.getInstance(), "此操作不可撤销，是否确认清空文件", "清空文件确认对话框", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (result == JOptionPane.YES_OPTION) {
+                PPT ppt = new PPT();
+                Page page = new Page();
+                ppt.allPage.add(page);
+                PPT.reset(ppt, 0);
+            }
+        });
         deletePageItem.addActionListener(topMenuListener);
         copyPageItem.addActionListener(topMenuListener);
         insertPageItem.addActionListener(topMenuListener);
         insertPicItem.addActionListener(topMenuListener);
         deletePicItem.addActionListener(topMenuListener);
         savePicItem.addActionListener(topMenuListener);
+        revokeItem.addActionListener(topMenuListener);
+//        clearDrawItem.addActionListener(topMenuListener);
+        clearDrawItem.addActionListener(e -> {
+            int result = JOptionPane.showConfirmDialog(MyJFrame.getInstance(), "此操作不可撤销，是否确认清空画板", "清空画板确认对话框", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (result == JOptionPane.YES_OPTION) {
+                Page page = DrawBoardListener.getInstance().nowPage;
+                page.previous.clear();
+                page.history.clear();
+                page.moveShape.clear();
+                DrawBoardListener.getInstance().revert(false);
+            }
+        });
+        playNowPageItem.addActionListener(topMenuListener);
+        playFirstPageItem.addActionListener(topMenuListener);
+//        deleteShapItem.addActionListener(topMenuListener);
 //        .addActionListener(topMenuListener);
 //        .addActionListener(topMenuListener);
 //        .addActionListener(topMenuListener);

@@ -217,7 +217,7 @@ public class TopMenu extends JPanel {
         set.addAll(fontList);
         // 使用映射
 
-        for (var item : set) {
+        for (Font item : set) {
             fontMap.put(item.getFamily(), item);
         }
         List<String> fontList2 = set.stream().map(item -> item.getFamily()).collect(Collectors.toList());

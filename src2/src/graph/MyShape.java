@@ -7,7 +7,7 @@ import java.awt.*;
 import java.io.Serializable;
 
 // 基本图形的抽象类（橡皮擦类和多图形类都从该类继承）
-public abstract class MyShape implements Serializable {
+public abstract class MyShape implements Serializable ,Cloneable{
     private static final long serialVersionUID = 1111014L;
 
     public static long shapeNum = 0L;
@@ -116,5 +116,9 @@ public abstract class MyShape implements Serializable {
         y2 = y1 + boxHigh;
     }
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return (MyShape) super.clone();
+    }
 }
 
