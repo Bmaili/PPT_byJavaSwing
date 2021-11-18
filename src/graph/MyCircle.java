@@ -1,15 +1,14 @@
 package graph;
 
-
 import java.awt.*;
 
-public class MyRectangle extends MyShape {
-
-    public MyRectangle() {
-        super();
-    }
-
-    public MyRectangle(int x1, int y1, int x2, int y2) {
+/**
+ * 圆形类
+ *
+ * @date 21:42 2021/11/18
+ */
+public class MyCircle extends MyShape {
+    public MyCircle(int x1, int y1, int x2, int y2) {
         super(x1, y1, x2, y2);
     }
 
@@ -20,10 +19,10 @@ public class MyRectangle extends MyShape {
         p.setStroke(new BasicStroke(this.width));
 
         p.setColor(this.mainColor);
-        p.drawRect(x1, y1, x2 - x1, y2 - y1);
+        p.drawOval(x1, y1, x2 - x1, y2 - y1);
         if (isFillShare) {
             p.setColor(this.fillColor);
-            p.fillRect(x1, y1, x2 - x1, y2 - y1);
+            p.fillOval(x1, y1, x2 - x1, y2 - y1);
         }
     }
 }

@@ -1,8 +1,6 @@
 package ui;
 
 
-import listener.DrawBoardListener;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -29,7 +27,7 @@ public class MainJFrame extends JFrame {
         //设置一个存放画板jpanel的容器
         JPanel down = new JPanel();
         down.setPreferredSize(new Dimension(768, 432));
-        down.add(DrawBoardListener.getInstance());
+        down.add(DrawBoard.getInstance());
 
         //创建一个水平分隔面板
         JSplitPane drawSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(PageListPanel.pageJList), down);

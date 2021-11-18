@@ -2,6 +2,11 @@ package graph;
 
 import java.awt.*;
 
+/**
+ * 五角星
+ *
+ * @date 21:41 2021/11/18
+ */
 public class MyFiveStar extends MyShape {
     public MyFiveStar() {
         super();

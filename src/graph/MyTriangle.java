@@ -1,9 +1,12 @@
 package graph;
 
-import listener.DrawBoardListener;
-
 import java.awt.*;
 
+/**
+ * 三角形类
+ *
+ * @date 21:34 2021/11/18
+ */
 public class MyTriangle extends MyShape {
     public MyTriangle() {
         super();

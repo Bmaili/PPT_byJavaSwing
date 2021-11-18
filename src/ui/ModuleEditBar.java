@@ -1,7 +1,5 @@
 package ui;
 
-import listener.DrawBoardListener;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
@@ -21,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class ModuleEditBar extends JPanel implements ChangeListener, ItemListener {
     private static ModuleEditBar myModuleEditBar = new ModuleEditBar();
-    DrawBoardListener drawBoardListener = DrawBoardListener.getInstance();
+    DrawBoard drawBoard = DrawBoard.getInstance();
 
     private ModuleEditBar() {
         this.setPreferredSize(new Dimension(400, 100));
@@ -157,7 +155,7 @@ public class ModuleEditBar extends JPanel implements ChangeListener, ItemListene
                 selectedColor = Color.BLACK;
             }
             mainColor.setBackground(selectedColor);
-            drawBoardListener.mainColor = selectedColor;
+            drawBoard.mainColor = selectedColor;
         });
 
         //绑定颜色编辑事件
@@ -167,14 +165,14 @@ public class ModuleEditBar extends JPanel implements ChangeListener, ItemListene
                 selectedColor = Color.WHITE;
             }
             fillColor.setBackground(selectedColor);
-            drawBoardListener.fillColor = selectedColor;
+            drawBoard.fillColor = selectedColor;
         });
 
         //图形填充选择复选框
         JCheckBox isFillSelect = new JCheckBox("图形填充（实心）？", true);
         isFillSelect.addChangeListener(e -> {
             JCheckBox checkBox = (JCheckBox) e.getSource();
-            drawBoardListener.isFillShape = checkBox.isSelected();
+            drawBoard.isFillShape = checkBox.isSelected();
         });
 
         //下面是排版设计，盒子层层嵌套
@@ -273,7 +271,7 @@ public class ModuleEditBar extends JPanel implements ChangeListener, ItemListene
     @Override
     public void stateChanged(ChangeEvent e) {
         JSlider jslider = (JSlider) e.getSource();
-        drawBoardListener.penWidth = jslider.getValue();
+        drawBoard.penWidth = jslider.getValue();
         System.out.println("调节画笔尺寸： " + jslider.getValue());
     }
 
@@ -287,7 +285,7 @@ public class ModuleEditBar extends JPanel implements ChangeListener, ItemListene
     @Override
     public void itemStateChanged(ItemEvent e) {
         JRadioButton jRadioButton = (JRadioButton) e.getSource();
-        drawBoardListener.selectModule = jRadioButton.getText();
+        drawBoard.selectModule = jRadioButton.getText();
         System.out.println("选择模式： " + jRadioButton.getText());
     }
 }

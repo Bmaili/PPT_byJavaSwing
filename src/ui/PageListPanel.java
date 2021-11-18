@@ -1,6 +1,5 @@
 package ui;
 
-import listener.DrawBoardListener;
 import saveobject.PPT;
 import saveobject.Page;
 
@@ -14,6 +13,7 @@ import java.awt.image.BufferedImage;
  * @date 16:13 2021/11/18
  */
 public class PageListPanel extends JPanel implements ListCellRenderer {
+    private static DrawBoard drawBoard = DrawBoard.getInstance();
 
     public static JList<Page> pageJList;   //PPT的每一页（page）列表
 
@@ -21,7 +21,7 @@ public class PageListPanel extends JPanel implements ListCellRenderer {
     public static DefaultListModel<Page> pageModel = new DefaultListModel<>();
 
     static {
-        PPT ppt = DrawBoardListener.getInstance().nowPPT;
+        PPT ppt = drawBoard.nowPPT;
 
         //往model里注入ppt数据
         for (Page p : ppt.allPage) {
@@ -63,9 +63,19 @@ public class PageListPanel extends JPanel implements ListCellRenderer {
                 flushPageImage();
             }
 
-            selectIndex = index;
-            DrawBoardListener.getInstance().nowPage = DrawBoardListener.getInstance().nowPPT.allPage.get(index);
-            DrawBoardListener.getInstance().setDrawBoardListener();
+            selectIndex = index;//更新为当前选择页数
+
+            //更新画板当前page
+            drawBoard.nowPage = drawBoard.nowPPT.allPage.get(index);
+
+            //更新画板page的相关数据
+            Page nowPage = drawBoard.nowPage;
+            drawBoard.history = nowPage.history;
+            drawBoard.previous = nowPage.previous;
+            drawBoard.moveShape = nowPage.moveShape;
+
+            //取得画板对象重绘
+            drawBoard.paint(drawBoard.drawPanel.getGraphics());
 
             //重绘主窗口，非常细节、重要、不起眼
             MainJFrame.getInstance().repaint();
@@ -85,7 +95,7 @@ public class PageListPanel extends JPanel implements ListCellRenderer {
         g.setColor(foreground);
 
         //将当前page里的image，缩小展示在左侧列表上
-        BufferedImage image = DrawBoardListener.getInstance().nowPPT.allPage.get(indexID).image;
+        BufferedImage image = drawBoard.nowPPT.allPage.get(indexID).image;
         if (image != null) {
             g.drawImage(image.getScaledInstance(154, 86, 0), 15, 15, null);
         }
@@ -106,15 +116,15 @@ public class PageListPanel extends JPanel implements ListCellRenderer {
      * @date 16:28 2021/11/18
      */
     public static void flushPageImage() {
-        DrawBoardListener.getInstance().drawPanel.requestFocus();//将焦点还给画板
+        drawBoard.drawPanel.requestFocus();//将焦点还给画板
 
         // 将当前主画板的样子“截图”,存放于当前Page的image里
-        Dimension imageSize = DrawBoardListener.getInstance().getSize();
+        Dimension imageSize = drawBoard.getSize();
         BufferedImage image = new BufferedImage(imageSize.width, imageSize.height, BufferedImage.TYPE_INT_ARGB);
-        DrawBoardListener.getInstance().nowPage.image = image;
+        drawBoard.nowPage.image = image;
 
         Graphics2D graphics = image.createGraphics();
-        DrawBoardListener.getInstance().paint(graphics);
+        drawBoard.paint(graphics);
         graphics.dispose();
     }
 }

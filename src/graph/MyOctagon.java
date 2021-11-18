@@ -2,6 +2,11 @@ package graph;
 
 import java.awt.*;
 
+/**
+ * 八边形类
+ *
+ * @date 21:34 2021/11/18
+ */
 public class MyOctagon extends MyShape {
     public MyOctagon() {
         super();

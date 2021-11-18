@@ -15,10 +15,11 @@ import java.awt.image.BufferedImage;
 public class PlayJFrame extends JFrame {
     private static PlayJFrame playJFrame;
 
-    private BufferedImage image;
-    private PPT playPPT;
-    private int indexPPT;
+    private BufferedImage image;  //播放的图像
+    private PPT playPPT;  //播放的ppt
+    private int indexPPT; //page定位
 
+    //定义全屏尺寸
     Toolkit kit = Toolkit.getDefaultToolkit();
     Dimension dimension = kit.getScreenSize();
 
@@ -68,7 +69,10 @@ public class PlayJFrame extends JFrame {
                 indexPPT = playPPT.allPage.size() - 1;
             image = playPPT.allPage.get(indexPPT).image;
             if (this.image != null)
-                this.getGraphics().drawImage(this.image, 0, 0, dimension.width, dimension.height, null);
+                try {
+                    this.getGraphics().drawImage(this.image, 0, 0, dimension.width, dimension.height, null);
+                } catch (NullPointerException e) {
+                }
         }
     }
 
