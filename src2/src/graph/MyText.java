@@ -1,6 +1,6 @@
 package graph;
 
-import ui.TopMenu;
+import ui.ModuleEditBar;
 
 import java.awt.*;
 
@@ -11,10 +11,10 @@ public class MyText extends MyShape {
 
     public MyText(int x1, int y1, int x2, int y2) {
         super(x1, y1, x2, y2);
-        TopMenu topMenu = TopMenu.getInstance();
-        this.content = topMenu.textContent.getText();
-        this.font = topMenu.fontMap.get(topMenu.fontChooser.getSelectedItem());
-        this.size = (Integer) topMenu.sizeChooser.getSelectedItem();
+        ModuleEditBar moduleEditBar = ModuleEditBar.getInstance();
+        this.content = moduleEditBar.textContent.getText();
+        this.font = moduleEditBar.fontMap.get(moduleEditBar.fontChooser.getSelectedItem());
+        this.size = (Integer) moduleEditBar.sizeChooser.getSelectedItem();
     }
 
     @Override

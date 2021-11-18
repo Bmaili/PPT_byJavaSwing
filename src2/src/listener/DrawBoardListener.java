@@ -3,8 +3,6 @@ package listener;
 import graph.*;
 import saveobject.PPT;
 import saveobject.Page;
-import ui.MyJFrame;
-import ui.PageListPanel;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -13,7 +11,6 @@ import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.util.Deque;
 import java.util.LinkedList;
 
 public class DrawBoardListener extends JPanel implements MouseInputListener {
@@ -47,16 +44,12 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
 
     private DrawBoardListener() {
 
-//		我自己设置的大小 ——11月13日
         setPreferredSize(new Dimension(1100, 648));
         Border border = new LineBorder(Color.black);
         setBorder(border);
         setBackground(Color.white);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
-//
-//        Dimension imageSize = this.getSize();
-//        defaultImage = new BufferedImage(imageSize.width, imageSize.height, BufferedImage.TYPE_INT_ARGB);
 
         nowPPT = new PPT();
         nowPPT.allPage.add(new Page());
@@ -67,9 +60,6 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
     public static DrawBoardListener getInstance() {
         return drawBoardListener;
     }
-//    public DrawBoardListener(JPanel drawPanel) {
-//        this.drawPanel=drawPanel;
-//    }
 
 
     @Override
@@ -118,7 +108,6 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
                             break;
                         }
                     }
-
                     break;
                 }
             }
@@ -132,6 +121,7 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
     @Override
     public void mouseReleased(MouseEvent e) {
 //        System.out.println("鼠标释放"+" "+start_x+" "+start_y+" "+stop_x+" "+stop_y);
+
         stop_x = e.getX();
         stop_y = e.getY();
         switch (this.selectModule) {
@@ -149,7 +139,6 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
                     // 加入历史
                     lastShape = selectShape;
                     history.add(lastShape);
-                    // 用pen将tmp画在图上
                     lastShape.draw(drawPanel.getGraphics());
                 }
                 selectShape = null;
@@ -161,6 +150,7 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
                 moveShape.add(lastShape);
                 break;
         }
+
     }
 
     @Override
@@ -197,7 +187,6 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
                     // 加入历史
                     lastShape = selectShape;
                     history.add(lastShape);
-                    // 用pen将tmp画在图上
                     lastShape.draw(drawPanel.getGraphics());
                 }
                 break;
@@ -262,7 +251,6 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
                 lastShape = new MyText(start_x, start_y, stop_x, stop_y);
                 break;
             default:
-//                lastShape = new MyRectangle(start_x, start_y, stop_x, stop_y);
                 lastShape = null;
                 break;
         }
@@ -270,7 +258,6 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
         // 加入历史
         if (lastShape != null)
             history.add(lastShape);
-        // 用pen将tmp画在图上
         lastShape.draw(drawPanel.getGraphics());
     }
 
@@ -285,7 +272,6 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
     }
 
     public void paint(Graphics p) {
-//        if (windowChange) {
 
         // 该函数是窗口大小变化时自动调用的函数，其中的p默认是this.getGraphics()（也就是绘图区域的画笔）
         // 为父类重新绘制（即添加背景色）
@@ -300,9 +286,5 @@ public class DrawBoardListener extends JPanel implements MouseInputListener {
         for (MyShape item : history) {
             item.draw(p);
         }
-
-//            MyJFrame.getInstance().repaint();
-//        System.out.println("重绘" + (++II) + "次");
-//        }
     }
 }

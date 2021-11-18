@@ -2,35 +2,33 @@ package ui;
 
 
 import listener.DrawBoardListener;
-import listener.TopMenuListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
-public class MyJFrame extends JFrame {
-//    TopMenuListener t = TopMenuListener.getInstance();
-//    DrawBoardListener el = DrawBoardListener.getInstance();
-    private static MyJFrame mainWin = new MyJFrame("工作页面");
+/**
+ * 项目启动入口，主界面UI，负责各部件的布局与启动
+ *
+ * @Date 12:25 2021/11/18
+ */
+public class MainJFrame extends JFrame {
+    private static MainJFrame mainWin = new MainJFrame("SimplePPT");
 
-    public static MyJFrame getInstance() {
+    public static MainJFrame getInstance() {
         return mainWin;
     }
 
-    private MyJFrame(String name) {
+    private MainJFrame(String name) {
         super(name);
     }
 
     private void init() {
+        //初始化顶部菜单栏
+        this.setJMenuBar(TopMenuBar.getInstance());
 
-
-        this.setJMenuBar(MyJMenuBar.getInstance());
-
+        //设置一个存放画板jpanel的容器
         JPanel down = new JPanel();
-
-        //我电脑1920x1080
         down.setPreferredSize(new Dimension(768, 432));
-//        down.setLayout(new GridBagLayout());
         down.add(DrawBoardListener.getInstance());
 
         //创建一个水平分隔面板
@@ -41,42 +39,25 @@ public class MyJFrame extends JFrame {
         Box drawBox = Box.createHorizontalBox();
         drawBox.add(drawSplit);
 
-
+        //mainBox 放置左侧栏、画板、顶部栏
         Box MainBox = Box.createVerticalBox();
-        MainBox.add(TopMenu.getInstance());
+        MainBox.add(ModuleEditBar.getInstance());
         MainBox.add(drawBox);
 
         mainWin.add(MainBox);
 
-
+        // 全屏显示
         Toolkit kit = Toolkit.getDefaultToolkit();
         Dimension dimension = kit.getScreenSize();
-
-        // 全屏显示
         mainWin.setExtendedState(Frame.MAXIMIZED_BOTH);
-        // 非全屏后自适应屏幕
-//        mainWin.pack();
-
         mainWin.setBounds(0, 0, dimension.width, dimension.height);
-
         // 定义关闭程序
         mainWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         // 设置可见
         mainWin.setVisible(true);
-
-        for (int i = 0; i < DrawBoardListener.getInstance().nowPPT.allPage.size() - 1; i++) {
-            DrawBoardListener.getInstance().nowPage = DrawBoardListener.getInstance().nowPPT.allPage.get(i);
-            PageListPanel.flushPageList();
-        }
-        DrawBoardListener.getInstance().nowPage = DrawBoardListener.getInstance().nowPPT.allPage.get(0);
-
-
-
     }
 
-
     public static void main(String[] args) {
-        MyJFrame.getInstance().init();
+        MainJFrame.getInstance().init();
     }
 }

@@ -2,6 +2,7 @@ package saveobject;
 
 import graph.MyShape;
 import listener.DrawBoardListener;
+import ui.PageListPanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -10,7 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.LinkedList;
 
-public class Page implements Serializable ,Cloneable{
+public class Page implements Serializable, Cloneable {
     private static final long serialVersionUID = 1111013L;
     // 所有画过的图
     public LinkedList<MyShape> history;
@@ -37,7 +38,7 @@ public class Page implements Serializable ,Cloneable{
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        Page newPage = (Page)super.clone();
+        Page newPage = (Page) super.clone();
         try {
             ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
             ObjectOutputStream out = new ObjectOutputStream(byteOut);
@@ -45,31 +46,24 @@ public class Page implements Serializable ,Cloneable{
             out.writeObject(history);
             ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
             ObjectInputStream in = new ObjectInputStream(byteIn);
-            newPage.history =  (LinkedList<MyShape>)in.readObject();
+            newPage.history = (LinkedList<MyShape>) in.readObject();
 
             out.writeObject(previous);
-              byteIn = new ByteArrayInputStream(byteOut.toByteArray());
-              in = new ObjectInputStream(byteIn);
-            newPage.previous =  (LinkedList<MyShape>)in.readObject();
+            byteIn = new ByteArrayInputStream(byteOut.toByteArray());
+            in = new ObjectInputStream(byteIn);
+            newPage.previous = (LinkedList<MyShape>) in.readObject();
 
             out.writeObject(moveShape);
-              byteIn = new ByteArrayInputStream(byteOut.toByteArray());
-              in = new ObjectInputStream(byteIn);
-            newPage.moveShape =  (LinkedList<MyShape>)in.readObject();
+            byteIn = new ByteArrayInputStream(byteOut.toByteArray());
+            in = new ObjectInputStream(byteIn);
+            newPage.moveShape = (LinkedList<MyShape>) in.readObject();
 
             newPage.image = this.image;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println("深拷贝出错");
         }
 
-
-
-
-//        newPage.history = (LinkedList<MyShape>) history.clone();
-//        newPage.previous = (LinkedList<MyShape>) previous.clone();
-//        newPage.moveShape= (LinkedList<MyShape>) moveShape.clone();
-        return newPage ;
+        return newPage;
 
     }
 
@@ -82,16 +76,6 @@ public class Page implements Serializable ,Cloneable{
                 ", insertImagePath=" + insertImagePath +
                 '}';
     }
-
-
-//    public Page(Page page) {
-//        this.history = page.history;
-//        this.stack = page.stack;
-//        this.previous = page.previous;
-//        this.moveShape = page.moveShape;
-//        this.imagePath = page.imagePath;
-//        this.image = page.image;
-//    }
 
 
     //    序列化
@@ -109,10 +93,10 @@ public class Page implements Serializable ,Cloneable{
         try (//创建一个ObjectInputStream输入流
              ObjectInputStream ois = new ObjectInputStream(new FileInputStream("object.txt"))) {
             Page readPage = (Page) ois.readObject();
-            DrawBoardListener db = DrawBoardListener.getInstance();
-            db.history = readPage.history;
-            db.moveShape = readPage.moveShape;
-            db.previous = readPage.previous;
+            Page page = DrawBoardListener.getInstance().nowPPT.allPage.get(PageListPanel.selectIndex);
+            page.history = readPage.history;
+            page.moveShape = readPage.moveShape;
+            page.previous = readPage.previous;
 
             //取得画板对象重绘
             DrawBoardListener.getInstance().paint(DrawBoardListener.getInstance().drawPanel.getGraphics());

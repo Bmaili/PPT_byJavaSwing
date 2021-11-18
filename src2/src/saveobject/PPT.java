@@ -95,7 +95,7 @@ public class PPT implements Serializable {
 
             for (int i = 0; i < DrawBoardListener.getInstance().nowPPT.allPage.size() - 1; i++) {
                 DrawBoardListener.getInstance().nowPage = DrawBoardListener.getInstance().nowPPT.allPage.get(i);
-                PageListPanel.flushPageList();
+                PageListPanel.flushPageImage();
             }
             DrawBoardListener.getInstance().nowPage = DrawBoardListener.getInstance().nowPPT.allPage.get(0);
 
@@ -108,17 +108,17 @@ public class PPT implements Serializable {
         }
     }
 
-    //重置PPT
-    public static void reset(PPT ppt, int selectPage) {
+    /**
+     * 将当前画板（nowPPT）正在编辑的PPT和Page更新
+     *
+     * @return
+     * @Date 15:50 2021/11/18
+     * @param ppt 替换的新PPT
+     * @param selectPage 当前选择的页码
+     */
+    public static void resetDrawBoard(PPT ppt, int selectPage) {
         DrawBoardListener.getInstance().nowPPT = ppt;
         DrawBoardListener.getInstance().nowPage = ppt.allPage.get(selectPage);
-
-
-        DrawBoardListener db = DrawBoardListener.getInstance();
-        db.history = DrawBoardListener.getInstance().nowPage.history;
-        db.moveShape = DrawBoardListener.getInstance().nowPage.moveShape;
-        db.previous = DrawBoardListener.getInstance().nowPage.previous;
-
 
         PageListPanel.pageModel.clear();
         for (Page p : ppt.allPage) {
@@ -130,7 +130,7 @@ public class PPT implements Serializable {
         DrawBoardListener.getInstance().paint(DrawBoardListener.getInstance().drawPanel.getGraphics());
 
 
-        PageListPanel.flushPageList();
+        PageListPanel.flushPageImage();
 
     }
 
