@@ -10,6 +10,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.LinkedList;
 
 /**
@@ -57,9 +59,20 @@ public class DrawBoard extends JPanel implements MouseInputListener {
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
 
-        //程序启动时new一个PPT，这个PPT有一空白Page
+
+        //程序启动时new一个PPT，这个PPT有一Welcome Page
         nowPPT = new PPT();
-        nowPPT.allPage.add(new Page());
+        Page page = new Page();
+        try (//创建一个ObjectInputStream输入流
+             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("Welcome.sPage"))) {
+            Page readPage = (Page) ois.readObject();
+            page.history = readPage.history;
+            page.moveShape = readPage.moveShape;
+            page.previous = readPage.previous;
+        } catch (Exception e) {
+            System.out.println("未找到Welcsome.sPage");
+        }
+        nowPPT.allPage.add(page);
         nowPage = nowPPT.allPage.get(0);
     }
 

@@ -51,7 +51,7 @@ public class Page implements Serializable, Cloneable {
      */
     public void saveObject() {
         try (//创建一个ObjectOutputStream输出流
-             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("Page.txt"))) {
+             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("savePage.sPage"))) {
             oos.writeObject(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,7 +67,7 @@ public class Page implements Serializable, Cloneable {
      */
     public void outObject() {
         try (//创建一个ObjectInputStream输入流
-             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("Page.txt"))) {
+             ObjectInputStream ois = new ObjectInputStream(new FileInputStream("savePage.sPage"))) {
             Page readPage = (Page) ois.readObject();
             Page page = DrawBoard.getInstance().nowPPT.allPage.get(PageListPanel.selectIndex);
             page.history = readPage.history;
@@ -77,7 +77,7 @@ public class Page implements Serializable, Cloneable {
             //取得画板对象重绘
             DrawBoard.getInstance().paint(DrawBoard.getInstance().drawPanel.getGraphics());
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("未找到序列文件savePage.sPage");
         }
     }
 
@@ -173,6 +173,7 @@ public class Page implements Serializable, Cloneable {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(byteStream.toByteArray()));
             Page readPage = (Page) ois.readObject();
             readPage.image = nowPPT.allPage.get(PageListPanel.selectIndex).image;
+            readPage.insertImage = nowPPT.allPage.get(PageListPanel.selectIndex).insertImage;
 
             //将page加入到ppt和pageModel中
             nowPPT.allPage.add(PageListPanel.selectIndex + 1, readPage);

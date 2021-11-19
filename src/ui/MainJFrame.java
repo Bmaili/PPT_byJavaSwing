@@ -20,7 +20,7 @@ public class MainJFrame extends JFrame {
         super(name);
     }
 
-    private void init() {
+    public void init() {
         //初始化顶部菜单栏
         this.setJMenuBar(TopMenuBar.getInstance());
 
@@ -55,7 +55,7 @@ public class MainJFrame extends JFrame {
         mainWin.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        MainJFrame.getInstance().init();
-    }
+//    public static void main(String[] args) {
+//        MainJFrame.getInstance().init();
+//    }
 }

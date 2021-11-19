@@ -54,18 +54,20 @@ public class TopMenuBar extends JMenuBar {
 
     //操作说明
     private String operateString = "1、某些菜单项具有快捷键。\n" +
-            "2、选择：选择点击页面上已绘制的图形（图形重叠时默认以最下层为准），可以对该图形进行移动、删除、拉伸(点击右下角方框)操作。（无法选中自由绘线条）！\n" +
+            "2、选择：选择点击页面上已绘制的图形（图形重叠时默认以最下层为准），可以对该图形进行移动、删除、拉伸(点击右下角方框)操作。（无法选中自由绘线条！）\n" +
             "3、文件：SimplePPT的制作的、能解析的PPT文件的后缀名是: *.sPPT\n" +
             "3、背景图：可以为某页PPT插入或删除一张背景图片（支持png,jpg)，该背景图不会被序列化。\n" +
             "4、撤销：将已绘的图按操作顺序撤销。\n" +
             "5、序列化：将当前页的数据保存在固定目录下，反序列化时读取该数据覆盖当前页。\n" +
             "6、图片加载：当打开新的一个文件或插入一张新的空白页时，默认是没有加载该页的图片数据的，所以放映前先点击目标页以加载图片进内存。\n" +
             "7、放映：播放PPT时，Esc退出播放，上下键切换上一张/下一张，鼠标左键右键切换上一张/下一张。\n" +
-            "8、其他请见项目描述文件。";
+            "8、环境：请使用jak11及以上的版本运行，经测试jdk8下运行会使布局有异。\n" +
+            "9、其他请见项目描述文件。";
 
     //关于信息
     private String aboutString = "项目简介：一个基于Java Swing 开发的简易版PPT \n" +
             "开发作者： NEU 物联网19级 “摆起来” 小组 \n" +
+            "开发环境： jdk 11.0.12 ，Intellij IDEA 2021.1 \n" +
             "开发时间： 2021/11/12 - 2021/11/19 \n" +
             "项目地址： https://github.com/Bmaili/PPT_byJavaSwing.git";
 
@@ -242,7 +244,7 @@ public class TopMenuBar extends JMenuBar {
             Page page = drawBoard.nowPage;
             page.saveObject();
         });
-        xuliehua.setToolTipText("将此页数据序列化(Page.txt)，存在SimplePPT目录下");
+        xuliehua.setToolTipText("将此页数据序列化(Welcome.txt)，存在SimplePPT目录下");
 
 
         fanxulie.addActionListener(e -> {
